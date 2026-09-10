@@ -18,12 +18,12 @@ void Enemy::Create(cpu_mesh& m_meshEnemy, cpu_mesh& m_meshShadow, XMFLOAT2 posEn
 	entity->transform.SetScaling(0.3);
 	entity->transform.SetPosition(posEnemy.x, 2.f, posEnemy.y);
 
-	/*shadowEntity = cpuEngine.CreateEntity();
+	shadowEntity = cpuEngine.CreateEntity();
 	shadowEntity->pMesh = &m_meshShadow;
 	shadowEntity->transform.SetScaling(0.3);
 	shadowEntity->transform.SetPosition(posEnemy.x, 0.05f, posEnemy.y);
 	shadowEntity->pMaterial = &shadowMaterial;
-	shadowMaterial.ps = ShadowShader;*/
+	shadowMaterial.ps = ShadowShader;
 
 	m_enemyFSM = cpuEngine.CreateFSM(this);
 	m_enemyFSM->SetGlobal<StateEnemyFall>();

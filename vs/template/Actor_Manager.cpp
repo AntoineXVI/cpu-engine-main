@@ -67,12 +67,12 @@ void Actor_Manager::UpdateEnemyCollision()
 	{
 		cpu_entity* cpuEnemy = (*enemy)->entity;
 		cpu_entity* cpuPlayer = m_player->entity;
-		//cpu_entity* cpuShadow = (*enemy)->shadowEntity;
+		cpu_entity* cpuShadow = (*enemy)->shadowEntity;
 		if (cpuEnemy->transform.pos.y < 0.0f)
 		{
 			(*enemy)->GetFSM()->ToState(CPU_ID(StateEnemyCollisionFloor));
 			cpuEngine.Release(cpuEnemy);
-			//cpuEngine.Release(cpuShadow);
+			cpuEngine.Release(cpuShadow);
 		}
 		else if ((cpuEnemy->transform.pos.x < cpuPlayer->transform.pos.x + 0.2f) && (cpuEnemy->transform.pos.x > cpuPlayer->transform.pos.x - 0.2f) &&
 			(cpuEnemy->transform.pos.y < cpuPlayer->transform.pos.y + 0.2f) && (cpuEnemy->transform.pos.y > cpuPlayer->transform.pos.y - 0.2f))
@@ -80,7 +80,7 @@ void Actor_Manager::UpdateEnemyCollision()
 			(*enemy)->GetFSM()->ToState(CPU_ID(StateEnemyCollisionPlayer));
 			m_player->GetFSM()->ToState(CPU_ID(StatePlayerCollision));
 			cpuEngine.Release(cpuEnemy);
-			//cpuEngine.Release(cpuShadow);
+			cpuEngine.Release(cpuShadow);
 		}
 	}	
 }
