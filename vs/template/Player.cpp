@@ -13,12 +13,12 @@ Player::~Player()
 
 void Player::Create(cpu_mesh& m_meshPlayer, XMFLOAT2 posPlayer)
 {
-	entity = cpuEngine.CreateEntity();
-	entity->pMesh = &m_meshPlayer;
-	entity->transform.SetScaling(0.2);
-	entity->transform.SetPosition(posPlayer.x, 0.1f, posPlayer.y);
+	actorEntity = cpuEngine.CreateEntity();
+	actorEntity->pMesh = &m_meshPlayer;
+	actorEntity->transform.SetScaling(0.2);
+	actorEntity->transform.SetPosition(posPlayer.x, 0.1f, posPlayer.y);
 	m_posPlayer = posPlayer;
-	entity->pMaterial = &playerMaterial;
+	actorEntity->pMaterial = &playerMaterial;
 	playerMaterial.ps = PlayerShader;
 
 	m_playerFSM = cpuEngine.CreateFSM(this);
@@ -44,23 +44,18 @@ void Player::SetNewPosition(XMFLOAT2 posPlayer)
 
 void Player::Move()
 {
-	entity->transform.pos.x = m_posPlayer.x;
-	entity->transform.pos.z = m_posPlayer.y;
+	actorEntity->transform.pos.x = m_posPlayer.x;
+	actorEntity->transform.pos.z = m_posPlayer.y;
 }
-
-//void Player::MoveTo(XMFLOAT2 posPlayer)
-//{
-//	
-//}
 
 
 void Player::Destroy()
 {
-	if (entity)
+	if (actorEntity != nullptr)
 	{
-		entity = cpuEngine.Release(entity);
+		actorEntity = cpuEngine.Release(actorEntity);
 		m_playerFSM = cpuEngine.Release(m_playerFSM);
-		CPU_DELPTR(entity);
+		CPU_DELPTR(actorEntity);
 	}
 }
 

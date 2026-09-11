@@ -25,12 +25,10 @@ public:
 
 	cpu_fsm<Enemy>* GetFSM() { return m_enemyFSM; }
 
-	cpu_entity* entity;
 	cpu_entity* shadowEntity;
 	cpu_material shadowMaterial;	
 
 protected:
-	cpu_entity* m_pEntity;
 	cpu_fsm<Enemy>* m_enemyFSM;
 };
 
@@ -49,6 +47,13 @@ struct StateEnemyCollisionFloor
 };
 
 struct StateEnemyCollisionPlayer
+{
+	void OnEnter(Enemy& cur, int from);
+	void OnExecute(Enemy& cur);
+	void OnExit(Enemy& cur, int to);
+};
+
+struct StateEnemyStop
 {
 	void OnEnter(Enemy& cur, int from);
 	void OnExecute(Enemy& cur);

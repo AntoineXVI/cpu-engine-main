@@ -35,9 +35,9 @@ public:
 
 	int GetScore();
 
-	//void ClearEnemies();
+	int GetNumberEnemies();
 
-	//Enemy* GetOldestEnemy();
+	void ClearEnemies();
 
 	Player* GetPlayer();
 

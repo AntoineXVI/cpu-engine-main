@@ -3,7 +3,7 @@
 
 Enemy::Enemy()
 {
-	m_speed = 0.5f;
+	m_speed = 0.005f;
 }
 
 Enemy::~Enemy()
@@ -13,10 +13,10 @@ Enemy::~Enemy()
 
 void Enemy::Create(cpu_mesh& m_meshEnemy, cpu_mesh& m_meshShadow, XMFLOAT2 posEnemy)
 {
-	entity = cpuEngine.CreateEntity();
-	entity->pMesh = &m_meshEnemy;
-	entity->transform.SetScaling(0.3);
-	entity->transform.SetPosition(posEnemy.x, 2.f, posEnemy.y);
+	actorEntity = cpuEngine.CreateEntity();
+	actorEntity->pMesh = &m_meshEnemy;
+	actorEntity->transform.SetScaling(0.3);
+	actorEntity->transform.SetPosition(posEnemy.x, 2.f, posEnemy.y);
 
 	shadowEntity = cpuEngine.CreateEntity();
 	shadowEntity->pMesh = &m_meshShadow;
@@ -29,6 +29,7 @@ void Enemy::Create(cpu_mesh& m_meshEnemy, cpu_mesh& m_meshShadow, XMFLOAT2 posEn
 	m_enemyFSM->SetGlobal<StateEnemyFall>();
 	m_enemyFSM->Add<StateEnemyCollisionFloor>("collisionFloor");
 	m_enemyFSM->Add<StateEnemyCollisionPlayer>("collisionPlayer");
+	m_enemyFSM->Add<StateEnemyStop>("Stop");
 
 
 	this->GetFSM()->ToState(CPU_ID(StateEnemyFall));
@@ -51,27 +52,29 @@ void Enemy::ChangeSpeed(float speed)
 }
 void Enemy::ResetSpeed() 
 {
-	m_speed = 0.5f;
+	m_speed = 0.005f;
 }
 
 void Enemy::Fall()
 {
-	entity->transform.pos.y -= m_speed * cpuTime.delta;
+	actorEntity->transform.pos.y -= m_speed /* * cpuTime.delta*/;
 }
 
 void Enemy::Destroy()
 {
-	if (entity )
+	if ((actorEntity != nullptr) && (shadowEntity != nullptr))
 	{
-		entity = cpuEngine.Release(entity);
+		actorEntity = cpuEngine.Release(actorEntity);
 		m_enemyFSM = cpuEngine.Release(m_enemyFSM);
-		CPU_DELPTR(entity);
-	}
-	if (shadowEntity)
-	{
+		CPU_DELPTR(actorEntity);
+
 		shadowEntity = cpuEngine.Release(shadowEntity);
 		CPU_DELPTR(shadowEntity);
 	}
+	/*if (shadowEntity != nullptr)
+	{
+		
+	}*/
 }
 
 void StateEnemyFall::OnEnter(Enemy& cur, int from)
@@ -97,13 +100,13 @@ void StateEnemyCollisionFloor::OnEnter(Enemy& cur, int from)
 void StateEnemyCollisionFloor::OnExecute(Enemy& cur)
 {
 	//play music fail 0.1s
-	//cpuEngine.Release(cur.entity);
-	//cpuEngine.Release(cur.shadowEntity);
+	/*cur.actorEntity = cpuEngine.Release(cur.actorEntity);
+	cur.shadowEntity = cpuEngine.Release(cur.shadowEntity);*/
 }
 
 void StateEnemyCollisionFloor::OnExit(Enemy& cur, int to)
 {
-
+	
 }
 
 void StateEnemyCollisionPlayer::OnEnter(Enemy& cur, int from)
@@ -113,11 +116,26 @@ void StateEnemyCollisionPlayer::OnEnter(Enemy& cur, int from)
 
 void StateEnemyCollisionPlayer::OnExecute(Enemy& cur)
 {
-	//cpuEngine.Release(cur.entity);
-	//cpuEngine.Release(cur.shadowEntity);
+	/*cur.actorEntity = cpuEngine.Release(cur.actorEntity);
+	cur.shadowEntity = cpuEngine.Release(cur.shadowEntity);*/
 }
 
 void StateEnemyCollisionPlayer::OnExit(Enemy& cur, int to)
+{
+
+}
+
+void StateEnemyStop::OnEnter(Enemy& cur, int from)
+{
+	
+}
+
+void StateEnemyStop::OnExecute(Enemy& cur)
+{
+	
+}
+
+void StateEnemyStop::OnExit(Enemy& cur, int to)
 {
 
 }

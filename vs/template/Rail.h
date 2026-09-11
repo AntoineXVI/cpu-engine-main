@@ -14,6 +14,5 @@ public:
 
 	void Destroy();
 
-	cpu_entity* entity;
 };
 

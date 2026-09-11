@@ -58,7 +58,7 @@ void App::OnUpdate()
 	#ifdef _DEBUG
 	if (cpuInput.IsDown())
 	{
-		Actor_Manager::GetInstance().ChangeEnemiesSpeed(3.f);
+		Actor_Manager::GetInstance().ChangeEnemiesSpeed(0.05f);
 	}
 	if (cpuInput.IsDownReleased())
 	{
@@ -108,9 +108,9 @@ void App::OnRender(int pass)
 
 			states += "\nGame: ";
 			states += this->GetFSM()->GetName(this->GetFSM()->state);
-			/*Enemy* OldestEnemy = actor_manager.GetOldestEnemy();
-			states += "\nFirstEnemy: ";
-			states += OldestEnemy->GetFSM()->GetName(OldestEnemy->GetFSM()->state);*/
+			states += "\nNombre d'enemies: ";
+			states += CPU_STR(actor_manager.GetNumberEnemies()).c_str();
+
 
 			XMFLOAT3 tintDebug = { 1.0f, 1.0f, 0.8f };
 			cpuDevice.DrawText(&m_font, states.c_str(), (int)(cpuDevice.GetWidth() * 0.5f), 10, CPU_TEXT_CENTER, &tintDebug);
@@ -204,7 +204,7 @@ void StateAppInGame::OnExecute(App& cur)
 		playerAngle += angle;
 		Actor_Manager::GetInstance().UpdatePlayer(posPlayer);
 	}
-	Actor_Manager::GetInstance().UpdateEnemyPhysics();
+	//Actor_Manager::GetInstance().UpdateEnemyPhysics();
 	Actor_Manager::GetInstance().UpdateEnemyCollision();
 	Actor_Manager::GetInstance().PurgeEnemies();
 
@@ -219,7 +219,7 @@ void StateAppInGame::OnExecute(App& cur)
 
 	int totalScore = cur.actor_manager.GetScore();
 
-	if (totalScore > 5 || totalScore < -5) 
+	if (totalScore >= 5 || totalScore <= -5) 
 	{
 		cur.GetFSM()->ToState(CPU_ID(StateAppEnd));
 		return;
@@ -254,7 +254,7 @@ void StateAppEnd::OnEnter(App& cur, int from)
 void StateAppEnd::OnExecute(App& cur)
 {
 	cur.m_endGame = true;
-	//cur.actor_manager.ClearEnemies();
+	cur.actor_manager.ClearEnemies();
 }
 
 void StateAppEnd::OnExit(App& cur, int to)

@@ -13,11 +13,12 @@ Actor_Manager::~Actor_Manager()
 {
 	for (Actor* actor : m_actors)
 	{
-		delete actor;
+		if (actor != nullptr)
+		{
+			actor->actorEntity = cpuEngine.Release(actor->actorEntity);
+			delete actor;
+		}
 	}
-
-	m_actors.clear();
-	m_player = nullptr;
 }
 
 void Actor_Manager::AddPlayer(XMFLOAT2 initPos)
@@ -55,18 +56,18 @@ void Actor_Manager::StopPlayer()
 
 void Actor_Manager::UpdateEnemyPhysics()
 {
-	for (auto enemy = m_enemies.begin(); enemy != m_enemies.end(); enemy++)
+	/*for (auto enemy = m_enemies.begin(); enemy != m_enemies.end(); enemy++)
 	{
 		(*enemy)->GetFSM()->ToState(CPU_ID(StateEnemyFall));
-	}
+	}*/
 }
 
 void Actor_Manager::UpdateEnemyCollision()
 {
 	for (auto enemy = m_enemies.begin(); enemy != m_enemies.end(); enemy++)
 	{
-		cpu_entity* cpuEnemy = (*enemy)->entity;
-		cpu_entity* cpuPlayer = m_player->entity;
+		cpu_entity* cpuEnemy = (*enemy)->actorEntity;
+		cpu_entity* cpuPlayer = m_player->actorEntity;
 		cpu_entity* cpuShadow = (*enemy)->shadowEntity;
 		if (cpuEnemy->transform.pos.y < 0.0f)
 		{
@@ -89,11 +90,10 @@ void Actor_Manager::PurgeEnemies()
 {
 	for (auto enemy = m_enemies.begin(); enemy != m_enemies.end(); )
 	{
-		cpu_entity* cpuEnemy = (*enemy)->entity;
+		cpu_entity* cpuEnemy = (*enemy)->actorEntity;
 		if (cpuEnemy->dead )
 		{
 			enemy = m_enemies.erase(enemy);
-			//CPU_DELPTR((*enemy)->shadowEntity);
 		}			
 		else
 			++enemy;
@@ -130,30 +130,25 @@ int Actor_Manager::GetScore()
 	return m_score;
 }
 
-//void Actor_Manager::ClearEnemies()
-//{
-//	for (auto enemy = m_enemies.begin(); enemy != m_enemies.end(); enemy++)
-//	{
-//		cpu_entity* cpuEnemy = (*enemy)->entity;
-//		cpu_entity* cpuShadow = (*enemy)->shadowEntity;
-//		Release(cpuEnemy);
-//		Release(cpuShadow);
-//		cpuEngine.Release(cpuEnemy);
-//		cpuEngine.Release(cpuShadow);
-//	}
-//	PurgeEnemies();
-//}
+int Actor_Manager::GetNumberEnemies()
+{
+	return m_enemies.size();
+}
 
+void Actor_Manager::ClearEnemies()
+{
+	for (auto enemy = m_enemies.begin(); enemy != m_enemies.end(); enemy++)
+	{
+		cpu_entity* cpuEnemy = (*enemy)->actorEntity;
+		cpu_entity* cpuShadow = (*enemy)->shadowEntity;
+		Release(cpuEnemy);
+		Release(cpuShadow);
+		cpuEngine.Release(cpuEnemy);
+		cpuEngine.Release(cpuShadow);
+	}
+	PurgeEnemies();
+}
 
-//Enemy* Actor_Manager::GetOldestEnemy()
-//{
-//	if (m_enemies.size() < 0)
-//	{
-//		return nullptr;
-//	}
-//	int maxEnemies = m_enemies.size();
-//	return m_enemies[maxEnemies - 1];
-//}
 
 Player* Actor_Manager::GetPlayer()
 {

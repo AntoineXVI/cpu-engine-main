@@ -11,10 +11,10 @@ Rail::~Rail()
 }
 void Rail::Create(cpu_mesh& m_meshEnemy)
 {
-	entity = cpuEngine.CreateEntity();
-	entity->pMesh = &m_meshEnemy;
-	entity->transform.SetScaling(1.f);
-	entity->transform.SetPosition(0.f, 0.f, 0.f);
+	actorEntity = cpuEngine.CreateEntity();
+	actorEntity->pMesh = &m_meshEnemy;
+	actorEntity->transform.SetScaling(1.f);
+	actorEntity->transform.SetPosition(0.f, 0.f, 0.f);
 }
 
 
@@ -25,9 +25,9 @@ void Rail::Move()
 
 void Rail::Destroy()
 {
-	if (entity)
+	if (actorEntity)
 	{
-		entity = cpuEngine.Release(entity);
-		CPU_DELPTR(entity);
+		actorEntity = cpuEngine.Release(actorEntity);
+		CPU_DELPTR(actorEntity);
 	}
 }

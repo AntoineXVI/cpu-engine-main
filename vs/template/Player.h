@@ -18,18 +18,14 @@ public:
 
 	int GetState();
 
-	//void MoveTo(XMFLOAT2 posPlayer);
-
 	cpu_fsm<Player>* GetFSM() { return m_playerFSM; }
 
-	cpu_entity* entity;
 private:
 	//float m_playerAngle;
 
 	XMFLOAT2 m_posPlayer;
 	cpu_material playerMaterial;
 
-	cpu_entity* m_pEntity;
 
 	cpu_fsm<Player>* m_playerFSM;
 };
