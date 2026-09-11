@@ -41,6 +41,8 @@ public:
 
 	void ClearEnemies();
 
+	void StopEnemies();
+
 	Player* GetPlayer();
 
 	void Release(cpu_entity* p);

@@ -29,6 +29,7 @@ void Enemy::Create(cpu_mesh& m_meshEnemy, cpu_mesh& m_meshShadow, XMFLOAT2 posEn
 	m_enemyFSM->SetGlobal<StateEnemyFall>();
 	m_enemyFSM->Add<StateEnemyCollisionFloor>("collisionFloor");
 	m_enemyFSM->Add<StateEnemyCollisionPlayer>("collisionPlayer");
+	m_enemyFSM->Add<StateEnemyEnd>("End");
 
 	this->GetFSM()->ToState(CPU_ID(StateEnemyFall));
 }
@@ -116,6 +117,22 @@ void StateEnemyCollisionPlayer::OnExecute(Enemy& cur)
 }
 
 void StateEnemyCollisionPlayer::OnExit(Enemy& cur, int to)
+{
+
+}
+
+void StateEnemyEnd::OnEnter(Enemy& cur, int from)
+{
+	
+}
+
+void StateEnemyEnd::OnExecute(Enemy& cur)
+{
+	cur.actorEntity->visible = false;
+	cur.shadowEntity->visible = false;
+}
+
+void StateEnemyEnd::OnExit(Enemy& cur, int to)
 {
 
 }

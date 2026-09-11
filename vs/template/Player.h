@@ -12,11 +12,17 @@ public:
 
 	void SetNewPosition(XMFLOAT2 posPlayer);
 
+	void Accelerate();
+
+	void Brake();
+
 	virtual void Move();
 
 	void Destroy();
 
 	int GetState();
+
+	float GetSpeed();
 
 	cpu_fsm<Player>* GetFSM() { return m_playerFSM; }
 
@@ -26,8 +32,9 @@ private:
 	XMFLOAT2 m_posPlayer;
 	cpu_material playerMaterial;
 
-
 	cpu_fsm<Player>* m_playerFSM;
+
+	float m_maxSpeed;
 };
 
 struct StatePlayerIdle

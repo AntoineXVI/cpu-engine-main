@@ -154,6 +154,14 @@ void Actor_Manager::ClearEnemies()
 	PurgeEnemies();
 }
 
+void Actor_Manager::StopEnemies()
+{
+	for (auto enemy = m_enemies.begin(); enemy != m_enemies.end(); enemy++)
+	{
+		(*enemy)->GetFSM()->ToState(CPU_ID(StateEnemyEnd));
+	}
+}
+
 
 Player* Actor_Manager::GetPlayer()
 {

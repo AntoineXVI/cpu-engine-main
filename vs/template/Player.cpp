@@ -3,7 +3,7 @@
 
 Player::Player()
 {
-	//m_playerAngle = 0.f;
+	m_maxSpeed = 2.f;
 }
 
 Player::~Player()
@@ -42,6 +42,22 @@ void Player::SetNewPosition(XMFLOAT2 posPlayer)
 	m_posPlayer.y = posPlayer.y;
 }
 
+void Player::Accelerate()
+{
+	if (m_speed < m_maxSpeed)
+	{
+		m_speed += 0.1f;
+	}
+}
+
+void Player::Brake()
+{
+	if (m_speed > 0.5f)
+	{
+		m_speed -= 0.1f;
+	}
+}
+
 void Player::Move()
 {
 	actorEntity->transform.pos.x = m_posPlayer.x;
@@ -64,6 +80,11 @@ int Player::GetState()
 	return this->GetFSM()->state;
 }
 
+float Player::GetSpeed()
+{
+	return m_speed;
+}
+
 void StatePlayerIdle::OnEnter(Player& cur, int from)
 {
 
@@ -71,7 +92,14 @@ void StatePlayerIdle::OnEnter(Player& cur, int from)
 
 void StatePlayerIdle::OnExecute(Player& cur)
 {
-	cur.m_speed = 0.f;
+	if (cur.GetFSM()->totalTime > 2.f)
+	{
+		cur.m_speed = 0.f;
+	}
+	else
+	{
+		cur.Brake();
+	}
 }
 
 void StatePlayerIdle::OnExit(Player& cur, int to)
@@ -81,16 +109,19 @@ void StatePlayerIdle::OnExit(Player& cur, int to)
 
 void StatePlayerMovement::OnEnter(Player& cur, int from)
 {
-	cur.m_speed = 1.f;
 	//cur.m_speed = 0.1f;
 }
 
 void StatePlayerMovement::OnExecute(Player& cur)
 {
-	/*if (cur.m_speed < 1.f)
+	if (cur.GetFSM()->totalTime > 1.5f)
 	{
-		cur.m_speed += 0.1f;
-	}*/
+		cur.m_speed = 1.f;
+	}
+	else
+	{
+		cur.Accelerate();
+	}
 	cur.Move();
 	cur.GetFSM()->ToState(CPU_ID(StatePlayerIdle));
 }

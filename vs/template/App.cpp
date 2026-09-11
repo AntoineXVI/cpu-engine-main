@@ -187,11 +187,13 @@ void StateAppInGame::OnExecute(App& cur)
 	float time = cpuTime.total;
 
 	XMFLOAT2 posPlayer = cur.AngleToPos(playerAngle);
+	float playerSpeed = cur.actor_manager.GetPlayer()->GetSpeed();
 	
 	// move counter clockwise direction
 	if (cpuInput.IsLeft())
 	{
 		// calculate player angle
+		//float angle = -XM_PI * dt * playerSpeed;
 		float angle = -XM_PI * dt;
 		playerAngle += angle;
 		Actor_Manager::GetInstance().UpdatePlayer(posPlayer);
@@ -200,11 +202,11 @@ void StateAppInGame::OnExecute(App& cur)
 	else if (cpuInput.IsRight())
 	{
 		// calculate player angle
+		//float angle = XM_PI * dt * playerSpeed;
 		float angle = XM_PI * dt;
 		playerAngle += angle;
 		Actor_Manager::GetInstance().UpdatePlayer(posPlayer);
 	}
-	//Actor_Manager::GetInstance().UpdateEnemyPhysics();
 	Actor_Manager::GetInstance().UpdateEnemyCollision();
 	Actor_Manager::GetInstance().PurgeEnemies();
 
@@ -254,7 +256,9 @@ void StateAppEnd::OnEnter(App& cur, int from)
 void StateAppEnd::OnExecute(App& cur)
 {
 	cur.m_endGame = true;
-	//cur.actor_manager.ClearEnemies();
+
+	cur.actor_manager.StopEnemies();
+	
 }
 
 void StateAppEnd::OnExit(App& cur, int to)
