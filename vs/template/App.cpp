@@ -69,7 +69,7 @@ void App::OnUpdate()
 
 void App::OnExit()
 {
-	
+	actor_manager.DestroyAll();
 }
 
 
@@ -254,7 +254,7 @@ void StateAppEnd::OnEnter(App& cur, int from)
 void StateAppEnd::OnExecute(App& cur)
 {
 	cur.m_endGame = true;
-	cur.actor_manager.ClearEnemies();
+	//cur.actor_manager.ClearEnemies();
 }
 
 void StateAppEnd::OnExit(App& cur, int to)

@@ -52,11 +52,3 @@ struct StateEnemyCollisionPlayer
 	void OnExecute(Enemy& cur);
 	void OnExit(Enemy& cur, int to);
 };
-
-struct StateEnemyStop
-{
-	void OnEnter(Enemy& cur, int from);
-	void OnExecute(Enemy& cur);
-	void OnExit(Enemy& cur, int to);
-};
-

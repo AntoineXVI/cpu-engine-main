@@ -11,9 +11,14 @@ Actor_Manager::Actor_Manager()
 
 Actor_Manager::~Actor_Manager()
 {
+	
+}
+
+void Actor_Manager::DestroyAll()
+{
 	for (Actor* actor : m_actors)
 	{
-		if (actor != nullptr)
+		if (actor->actorEntity != nullptr)
 		{
 			actor->actorEntity = cpuEngine.Release(actor->actorEntity);
 			delete actor;

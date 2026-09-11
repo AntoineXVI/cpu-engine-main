@@ -21,16 +21,14 @@ void Enemy::Create(cpu_mesh& m_meshEnemy, cpu_mesh& m_meshShadow, XMFLOAT2 posEn
 	shadowEntity = cpuEngine.CreateEntity();
 	shadowEntity->pMesh = &m_meshShadow;
 	shadowEntity->transform.SetScaling(0.3);
-	shadowEntity->transform.SetPosition(posEnemy.x, 0.05f, posEnemy.y);
 	shadowEntity->pMaterial = &shadowMaterial;
 	shadowMaterial.ps = ShadowShader;
+	shadowEntity->transform.SetPosition(posEnemy.x, 0.05f, posEnemy.y);
 
 	m_enemyFSM = cpuEngine.CreateFSM(this);
 	m_enemyFSM->SetGlobal<StateEnemyFall>();
 	m_enemyFSM->Add<StateEnemyCollisionFloor>("collisionFloor");
 	m_enemyFSM->Add<StateEnemyCollisionPlayer>("collisionPlayer");
-	m_enemyFSM->Add<StateEnemyStop>("Stop");
-
 
 	this->GetFSM()->ToState(CPU_ID(StateEnemyFall));
 }
@@ -57,7 +55,7 @@ void Enemy::ResetSpeed()
 
 void Enemy::Fall()
 {
-	actorEntity->transform.pos.y -= m_speed /* * cpuTime.delta*/;
+	actorEntity->transform.pos.y -= m_speed;
 }
 
 void Enemy::Destroy()
@@ -71,10 +69,6 @@ void Enemy::Destroy()
 		shadowEntity = cpuEngine.Release(shadowEntity);
 		CPU_DELPTR(shadowEntity);
 	}
-	/*if (shadowEntity != nullptr)
-	{
-		
-	}*/
 }
 
 void StateEnemyFall::OnEnter(Enemy& cur, int from)
@@ -100,6 +94,7 @@ void StateEnemyCollisionFloor::OnEnter(Enemy& cur, int from)
 void StateEnemyCollisionFloor::OnExecute(Enemy& cur)
 {
 	//play music fail 0.1s
+
 	/*cur.actorEntity = cpuEngine.Release(cur.actorEntity);
 	cur.shadowEntity = cpuEngine.Release(cur.shadowEntity);*/
 }
@@ -121,21 +116,6 @@ void StateEnemyCollisionPlayer::OnExecute(Enemy& cur)
 }
 
 void StateEnemyCollisionPlayer::OnExit(Enemy& cur, int to)
-{
-
-}
-
-void StateEnemyStop::OnEnter(Enemy& cur, int from)
-{
-	
-}
-
-void StateEnemyStop::OnExecute(Enemy& cur)
-{
-	
-}
-
-void StateEnemyStop::OnExit(Enemy& cur, int to)
 {
 
 }

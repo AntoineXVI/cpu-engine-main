@@ -10,6 +10,8 @@ public:
 	Actor_Manager();
 	~Actor_Manager();
 
+	void DestroyAll();
+
 	static Actor_Manager& GetInstance() { return *s_actorManager; }
 
 	void AddEnemy(XMFLOAT2 initPos);
